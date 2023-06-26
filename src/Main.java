@@ -1,8 +1,11 @@
+import Shop.ProductManager;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
+        ProductManager p_manager = new ProductManager();
         int sel = 0;
         System.out.println("****************");
         System.out.println("1. 쇼핑몰");
@@ -18,6 +21,7 @@ public class Main {
             case 2:
                 break;
             case 3:
+                p_manager.display();
                 break;
             default:
                 break;
