@@ -37,7 +37,7 @@ class Product{
 }
 
 public class ProductManager {
-    public class Select(String[] args) {
+    public static void main(String[] args) {
         ArrayList<Product> p = new ArrayList<Product>(); // 제품정보를 담고 있는 리스트
         Scanner scn = new Scanner(System.in);
         int p_sel = 0;
@@ -46,6 +46,9 @@ public class ProductManager {
         System.out.println("2. 제품 수정");
         System.out.println("3. 제품 삭제");
         System.out.println("4. 제품 목록 출력");
+        System.out.println("0. 돌아가기");
+        System.out.println("0. 돌아가기");
+        System.out.println("0. 돌아가기");
         System.out.println("0. 돌아가기");
         System.out.print("메뉴를 선택하세요. -> ");
         p_sel = scn.nextInt();
