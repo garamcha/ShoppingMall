@@ -12,6 +12,7 @@ public class Main {
         int sel = 0;
         while(res){
             System.out.println("****************");
+            System.out.println("****************");
             System.out.println("1. 쇼핑몰");
             System.out.println("2. 고객관리");
             System.out.println("3. 제품관리");
