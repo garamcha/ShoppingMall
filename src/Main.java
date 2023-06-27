@@ -1,3 +1,4 @@
+import Shop.CustomerMain;
 import Shop.ProductManager;
 
 import java.util.Scanner;
@@ -6,9 +7,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         ProductManager p_manager = new ProductManager();
+        CustomerMain  c_manager = new CustomerMain();
         boolean res = true;
         int sel = 0;
         while(res){
+            System.out.println("****************");
             System.out.println("****************");
             System.out.println("1. 쇼핑몰");
             System.out.println("2. 고객관리");
@@ -20,6 +23,7 @@ public class Main {
                 case 1:
                     break;
                 case 2:
+                    c_manager.menu(true);
                     break;
                 case 3:
                     p_manager.display(true);
