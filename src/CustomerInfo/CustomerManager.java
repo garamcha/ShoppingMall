@@ -1,15 +1,76 @@
-package Shop;
+package CustomerInfo;
 
-import java.util.ArrayList;
+import CustomerInfo.CustomerItem;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 
-public class CustomerMain {
-	static Customer c = new Customer();
-	static HashMap<Integer, Customer> hashMap = new HashMap<>();
-	static int cNum = 0;
+public class CustomerManager {
+	static CustomerItem c = new CustomerItem();
+	static HashMap<Integer, CustomerItem> hashMap = new HashMap<>();
+
+	public CustomerManager() throws IOException {
+		String path = "customer.csv";
+		File file = new File(path);
+		if (file.exists()) {
+			BufferedReader br = new BufferedReader(new FileReader(file, Charset.forName("UTF-8"))); // 파일을 읽기
+			String strLine = null;
+			String[] custArr = null;
+			int num = 0;
+			while ((strLine = br.readLine()) != null) {
+				custArr = strLine.split(",");
+				try {
+					num = Integer.parseInt(custArr[0].trim());
+					String name = custArr[1].trim();
+					String phone = custArr[2].trim();
+					String email = custArr[3].trim();
+					String address = custArr[4].trim();
+					CustomerItem cItem = new CustomerItem(num, name, phone, email, address);
+					addCustomerFile(cItem);
+
+				} catch (NumberFormatException ex) {
+					ex.printStackTrace();
+				}
+				System.out.printf("csv정보: %s\n", strLine); // 읽어들인 문자열을 출력함
+			}
+			c.setNum(num+1);
+		}
+	}
+
+	public void addCustomerFile(CustomerItem cItem) {
+		hashMap.put(cItem.getNum(), cItem);
+	}
+
+	public static void saveToFile() { // 파일에 쓰기
+		String path = "customer.csv";
+		File file = new File(path);
+		BufferedWriter bw = null;
+		try {
+			if (file.createNewFile()) {
+				System.out.println("파일 생성됨: " + file.getName());
+			} else {
+				System.out.println("파일이 이미 존재함");
+			}
+			bw = new BufferedWriter(new FileWriter(path, true));
+			for (int i = 0; i < c.getNum(); i++) {
+				String str;
+				str = hashMap.get(i).getNum() + "," + hashMap.get(i).getName() + "," + hashMap.get(i).getPhone() + ","
+						+ hashMap.get(i).getEmail() + "," + hashMap.get(i).getAddress() + "\n";
+				bw.append(str);
+			}
+			bw.close();
+		} catch (IOException e) {
+			System.out.println("파일쓰기에 에러 발생");
+			e.printStackTrace();
+		}
+	}
 
 	public static void menu(boolean r) {
 
@@ -62,6 +123,7 @@ public class CustomerMain {
 					break;
 				case 0:
 					r = false;
+					saveToFile();
 					break;
 				default:
 					System.out.println("잘못입력!!!");
@@ -93,15 +155,14 @@ public class CustomerMain {
 
 		if (!hashMap.containsValue(phone) && !hashMap.containsValue(email)) {
 			// hashMap
-			hashMap.put(cNum, new Customer(cNum, name, phone, email, addr));
-			cNum++;
-			c.setNum(cNum);
+			hashMap.put(c.getNum(), new CustomerItem(c.getNum(), name, phone, email, addr));
+			c.setNum(c.getNum() + 1);
 			result = true;
 		} else {
-			System.out.println("전화번호 또는 이메일 중복");
-			result = false;
+			System.out.println("전화번호 또는 이메일중복");
 		}
 		return result;
+
 	}
 
 	public static boolean updateCustomer() {
@@ -126,12 +187,8 @@ public class CustomerMain {
 			System.out.print("주소 : ");
 			String addr = sc.next();
 
-			c.setName(name);
-			c.setPhone(phone);
-			c.setEmail(email);
-			c.setAddress(addr);
 			// hashMap
-			hashMap.replace(num, new Customer(num, c.getName(), c.getPhone(), c.getEmail(), c.getAddress()));
+			hashMap.replace(num, new CustomerItem(num, name, phone, email, addr));
 			result = true;
 		} else {
 			System.out.println("고객번호 없음");
@@ -166,7 +223,7 @@ public class CustomerMain {
 		System.out.println("고객번호\t이름\t전화번호\t\t이메일\t\t주소");
 		while (iter.hasNext()) {
 			int key = iter.next();
-			Customer customer = hashMap.get(key);
+			CustomerItem customer = hashMap.get(key);
 			System.out.print(customer.getNum() + "\t" + customer.getName() + "\t" + customer.getPhone() + "\t"
 					+ customer.getEmail() + "\t" + customer.getAddress() + "\n");
 		}
@@ -178,11 +235,11 @@ public class CustomerMain {
 		int num = sc.nextInt();
 
 		// hashMap
-		if(hashMap.containsKey(num)) {
-		Customer customer = hashMap.get(num);
-		System.out.print("고객정보: " + customer.getNum() + "\t" + customer.getName() + "\t" + customer.getPhone() + "\t"
-				+ customer.getEmail() + "\t" + customer.getAddress() + "\n");
-		}else {
+		if (hashMap.containsKey(num)) {
+			CustomerItem customer = hashMap.get(num);
+			System.out.print("고객정보: " + customer.getNum() + "\t" + customer.getName() + "\t" + customer.getPhone()
+					+ "\t" + customer.getEmail() + "\t" + customer.getAddress() + "\n");
+		} else {
 			System.out.println("고객번호 없음");
 		}
 	}

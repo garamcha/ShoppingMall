@@ -1,4 +1,4 @@
-package Shop;
+package CustomerInfo;
 
 public class CustomerItem {
 
