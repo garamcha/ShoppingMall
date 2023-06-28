@@ -1,6 +1,7 @@
 package CustomerInfo;
 
 import CustomerInfo.CustomerItem;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 public class CustomerManager {
 	static CustomerItem c = new CustomerItem();
 	static HashMap<Integer, CustomerItem> hashMap = new HashMap<>();
+
 
 	public CustomerManager() throws IOException {
 		String path = "customer.csv";
@@ -41,6 +43,7 @@ public class CustomerManager {
 				System.out.printf("csv정보: %s\n", strLine); // 읽어들인 문자열을 출력함
 			}
 			c.setNum(num+1);
+
 		}
 	}
 
@@ -59,7 +62,9 @@ public class CustomerManager {
 				System.out.println("파일이 이미 존재함");
 			}
 			bw = new BufferedWriter(new FileWriter(path, true));
+
 			for (int i = 0; i < c.getNum(); i++) {
+
 				String str;
 				str = hashMap.get(i).getNum() + "," + hashMap.get(i).getName() + "," + hashMap.get(i).getPhone() + ","
 						+ hashMap.get(i).getEmail() + "," + hashMap.get(i).getAddress() + "\n";
@@ -139,6 +144,7 @@ public class CustomerManager {
 
 		System.out.println("======입력=======");
 		System.out.print("고객번호 : ");
+
 		System.out.println(c.getNum());
 
 		System.out.print("이름 : ");
@@ -158,6 +164,7 @@ public class CustomerManager {
 			hashMap.put(c.getNum(), new CustomerItem(c.getNum(), name, phone, email, addr));
 			c.setNum(c.getNum() + 1);
 			result = true;
+
 		} else {
 			System.out.println("전화번호 또는 이메일중복");
 		}
