@@ -4,12 +4,14 @@ import java.util.Scanner;
 
 import CustomerInfo.CustomerManager;
 import ProductInfo.ProductManager;
+import Shop.ShopManager;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scn = new Scanner(System.in);
         ProductManager p_manager = new ProductManager();
         CustomerManager c_manager = new CustomerManager();
+        ShopManager s_manager = new ShopManager();
         boolean res = true;
         int sel = 0;
         while (res) {
@@ -22,12 +24,13 @@ public class Main {
             sel = scn.nextInt(); // 메뉴입력받기
             switch (sel) {
                 case 1:
+                    s_manager.shopDisplay(); // 쇼핑몰 화면 출력
                     break;
                 case 2:
-                    c_manager.menu(true);
+                    c_manager.menu(true); // 고객관리 화면 출력
                     break;
                 case 3:
-                    p_manager.display(true);
+                    p_manager.display(true); // 제품 관리 화면 출력
                     break;
                 case 0:
                     System.out.println("프로그램 종료..");
