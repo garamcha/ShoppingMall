@@ -1,4 +1,4 @@
-package Shop;
+package ProductInfo;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -72,6 +72,7 @@ public class ProductManager {
                     int quantity = Integer.parseInt(arr[3].trim());
                     num = code+1;
                     p.add(new Product(code, p_name, price, quantity));
+                    productList.put(p_name, new Product(code, p_name, price, quantity));
                 }catch (NumberFormatException ex){
                     ex.printStackTrace();
                 }
@@ -111,15 +112,15 @@ public class ProductManager {
                 case 4: // 4. 제품 목록 출력
                     System.out.println("=======================");
                     System.out.println("+++++++제품 목록++++++++");
-                    // HashMap 사용
+                    /*// HashMap 사용
                     for(String key : productList.keySet()){
                         productList.get(key).printValue();
-                    }
-                    /* // ArrayList 사용
+                    }*/
+                     // ArrayList 사용
                     for (Product a : p) {
                         a.printValue();
                         System.out.println("- - - - - - - - - - - - - - -");
-                    }*/
+                    }
                     break;
                 case 5: // 5. 제품 검색
                     searchProduct();
@@ -187,7 +188,7 @@ public class ProductManager {
             return false;
         }
         else {
-            //p.add(new Product(num++, p_name, p_price, p_quan)); // ArrayList 추가
+            p.add(new Product(num, p_name, p_price, p_quan)); // ArrayList 추가
             productList.put(p_name, new Product(num++, p_name, p_price, p_quan));
             System.out.println("제품 등록 성공!!");
             return true;
@@ -213,6 +214,7 @@ public class ProductManager {
                 int modify_quan = scn.nextInt();
                 productList.remove(key);
                 productList.put(modify_name, new Product( check.getProduct_code(), modify_name, modify_price, modify_quan));
+                p.set(check.getProduct_code(), new Product(check.getProduct_code(), modify_name, modify_price, modify_quan));
                 //productList.replace(pro_name, new Product( check.getProduct_code(), modify_name, modify_price, modify_quan));
                 break;
             }
@@ -251,14 +253,20 @@ public class ProductManager {
                 System.out.print("제품을 삭제하시겠습니까? y/n : ");
                 String check = scn.next().trim();
                 if(check.equals("y") || check.equals("Y")){
-                    productList.remove(del_name);
+                    Iterator<Product> iter = p.iterator();
+                    while(iter.hasNext()){
+                        Product product = iter.next();
+                        if(product.getProduct_code() == productList.get(key).getProduct_code()){
+                            iter.remove();
+                            productList.remove(key);
+                        }
+                    }
                     System.out.println("제품이 삭제되었습니다.");
                 }else if (check.equals("n") || check.equals("N") ){
                     System.out.println("제품 삭제 취소.");
                 }else{
                     System.out.println("잘못된 입력.");
                 }
-                productList.remove(key);
                 break;
             }
         }

@@ -1,4 +1,4 @@
-package Shop;
+package CustomerInfo;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,7 +38,7 @@ public class CustomerManager {
 				} catch (NumberFormatException ex) {
 					ex.printStackTrace();
 				}
-				System.out.printf("csv정보: %s\n", strLine); // 읽어들인 문자열을 출력함
+				//System.out.printf("csv정보: %s\n", strLine); // 읽어들인 문자열을 출력함
 			}
 			c.setNum(num + 1);
 		} else {
