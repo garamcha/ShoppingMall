@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class CustomerManager {
 	static CustomerItem c = new CustomerItem();
 	static HashMap<Integer, CustomerItem> hashMap = new HashMap<>();
-	int cNum = 0;
 
 	public CustomerManager() throws IOException {
 		String path = "customer.csv";
@@ -40,9 +39,7 @@ public class CustomerManager {
 				}
 				System.out.printf("csv정보: %s\n", strLine); // 읽어들인 문자열을 출력함
 			}
-			c.setNum(num + 1);
-		} else {
-			c.setNum(0);
+			c.setNum(num+1);
 		}
 	}
 
@@ -61,7 +58,7 @@ public class CustomerManager {
 				System.out.println("파일이 이미 존재함");
 			}
 			bw = new BufferedWriter(new FileWriter(path, true));
-			for (int i = 0; i < c.getNum() + 1; i++) {
+			for (int i = 0; i < c.getNum(); i++) {
 				String str;
 				str = hashMap.get(i).getNum() + "," + hashMap.get(i).getName() + "," + hashMap.get(i).getPhone() + ","
 						+ hashMap.get(i).getEmail() + "," + hashMap.get(i).getAddress() + "\n";
@@ -124,8 +121,8 @@ public class CustomerManager {
 				searchCustomer();
 				break;
 			case 0:
-				saveToFile();
 				r = false;
+				saveToFile();
 				break;
 			default:
 				System.out.println("잘못입력!!!");
@@ -141,12 +138,7 @@ public class CustomerManager {
 
 		System.out.println("======입력=======");
 		System.out.print("고객번호 : ");
-		if (c.getNum() == 0) {
-			c.setNum(0);
-			System.out.println(c.getNum());
-		} else {
-			System.out.println(c.getNum() + 1);
-		}
+		System.out.println(c.getNum());
 
 		System.out.print("이름 : ");
 		String name = sc.next();
@@ -162,14 +154,9 @@ public class CustomerManager {
 
 		if (!hashMap.containsValue(phone) && !hashMap.containsValue(email)) {
 			// hashMap
-			if (c.getNum() == 0) {
-				c.setNum(0);
-			} else {
-				c.setNum(c.getNum() + 1);
-			}
 			hashMap.put(c.getNum(), new CustomerItem(c.getNum(), name, phone, email, addr));
+			c.setNum(c.getNum() + 1);
 			result = true;
-
 		} else {
 			System.out.println("전화번호 또는 이메일중복");
 		}
