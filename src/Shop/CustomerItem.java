@@ -8,7 +8,7 @@ public class CustomerItem {
 	private String email;
 	private String address;
 
-	public CustomerItem() {
+	public CustomerItem() { 
 	}
 
 	public CustomerItem(String name, String phone, String email, String address) {
