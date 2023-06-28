@@ -18,6 +18,7 @@ public class CustomerManager implements PrintInfo {
 
 	public CustomerManager() throws IOException { // 생성자 : 파일 읽어옴
 		String path = "customer.csv"; // 읽어들일 csv 파일 이름 지정
+
 		File file = new File(path);
 		if (file.exists()) { // 파일이 존재할 때
 			BufferedReader br = new BufferedReader(new FileReader(file, Charset.forName("UTF-8"))); // 파일을 읽어옴. 문제점
@@ -62,7 +63,9 @@ public class CustomerManager implements PrintInfo {
 				System.out.println("파일이 이미 존재함");
 			}
 			bw = new BufferedWriter(new FileWriter(path, true));
+
 			for (int i = 0; i < c.getNum(); i++) {
+
 				String str;
 				str = hashMap.get(i).getNum() + "," + hashMap.get(i).getName() + "," + hashMap.get(i).getPhone() + ","
 						+ hashMap.get(i).getEmail() + "," + hashMap.get(i).getAddress() + "\n";
@@ -144,6 +147,7 @@ public class CustomerManager implements PrintInfo {
 
 		System.out.println("======입력=======");
 		System.out.print("고객번호 : ");
+
 		System.out.println(c.getNum());
 
 		System.out.print("이름 : ");
@@ -162,6 +166,7 @@ public class CustomerManager implements PrintInfo {
 			hashMap.put(c.getNum(), new CustomerItem(c.getNum(), name, phone, email, addr));
 			c.setNum(c.getNum() + 1);
 			result = true;
+
 		} else {
 			Iterator<Integer> iter = hashMap.keySet().iterator();
 
