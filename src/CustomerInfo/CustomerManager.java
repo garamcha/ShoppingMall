@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-
 import Shop.PrintInfo;
 
 public class CustomerManager implements PrintInfo {
@@ -56,6 +55,7 @@ public class CustomerManager implements PrintInfo {
 		File file = new File(path);
 		BufferedWriter bw = null;
 		try {	//예외처리
+
 			if (file.createNewFile()) {
 				System.out.println("파일 생성됨: " + file.getName());
 			} else {
@@ -76,6 +76,7 @@ public class CustomerManager implements PrintInfo {
 	}
 
 	public void menu(boolean r) {
+
 
 		while (r) {
 			System.out.println();
@@ -223,6 +224,7 @@ public class CustomerManager implements PrintInfo {
 	}
 
 	public boolean removeCustomer() {
+
 		// 삭제
 		boolean result = false;
 		Scanner sc = new Scanner(System.in);
@@ -241,6 +243,7 @@ public class CustomerManager implements PrintInfo {
 	}
 
 	public void searchCustomer() {
+
 		System.out.print("찾는 고객번호를 입력: ");
 		Scanner sc = new Scanner(System.in);
 		int num = sc.nextInt();
@@ -269,5 +272,6 @@ public class CustomerManager implements PrintInfo {
 					+ customer.getEmail() + "\t" + customer.getAddress() + "\n");
 		}
 	}
+
 
 }

@@ -12,6 +12,7 @@ public class CustomerItem {
 	}
 
 	public CustomerItem(int num, String name, String phone, String email, String address) { // 생성
+
 		this.num = num;
 		this.name = name;
 		this.phone = phone;
