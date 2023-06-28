@@ -40,16 +40,18 @@ public class Main {
 import Shop.CustomerMain;
 import Shop.ProductManager;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scn = new Scanner(System.in);
         ProductManager p_manager = new ProductManager();
         CustomerMain  c_manager = new CustomerMain();
         boolean res = true;
         int sel = 0;
         while(res){
+            System.out.println("****************");
             System.out.println("****************");
             System.out.println("1. 쇼핑몰");
             System.out.println("2. 고객관리");
@@ -67,6 +69,7 @@ public class Main {
                     p_manager.display(true);
                     break;
                 case 0:
+                    res = false;
                     break;
                 default:
                     break;
