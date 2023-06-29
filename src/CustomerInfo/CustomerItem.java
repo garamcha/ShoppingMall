@@ -2,16 +2,17 @@ package CustomerInfo;
 
 public class CustomerItem {
 
-	private int num; // 회원번호
-	private String name; // 회원이름
-	private String phone; // 회원전화번호
+	private int num; // 고객번호
+	private String name; // 고객이름
+	private String phone; // 고객전화번호
 	private String email; // 이메일주소
 	private String address; // 사는곳
 
 	public CustomerItem() { // 기본생성자
 	}
 
-	public CustomerItem(int num, String name, String phone, String email, String address) { // 생성
+	public CustomerItem(int num, String name, String phone, String email, String address) {// 생성자
+		super();
 		this.num = num;
 		this.name = name;
 		this.phone = phone;

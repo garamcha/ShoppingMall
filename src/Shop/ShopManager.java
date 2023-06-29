@@ -17,15 +17,15 @@ public class ShopManager extends CustomerManager {
 	public void shopDisplay() {
 		boolean result = emailCheck();
 		if (result == true) {
-			while(true) {
+			while (true) {
 				System.out.println("=====환영합니다.=====");
 				System.out.println("1. 제품구매");
 				System.out.println("2. 장바구니");
 				System.out.print("메뉴를 선택하세요. -> ");
-				
+
 				Scanner scn = new Scanner(System.in);
 				int selected = scn.nextInt();
-				
+
 				System.out.println("로그인중..");
 			}
 		} else {
