@@ -11,7 +11,7 @@ public class Main {
         Scanner scn = new Scanner(System.in);
         ProductManager p_manager = new ProductManager();
         CustomerManager c_manager = new CustomerManager();
-        ShopManager s_manager = new ShopManager();
+        ShopManager s_manager = new ShopManager(p_manager);
         boolean res = true;
         int sel = 0;
         while (res) {
@@ -30,7 +30,7 @@ public class Main {
                     c_manager.menu(true); // 고객관리 화면 출력
                     break;
                 case 3:
-                    p_manager.display(true); // 제품 관리 화면 출력
+                    p_manager.login(true); // 제품 관리 화면 출력
                     break;
                 case 0:
                     System.out.println("프로그램 종료..");

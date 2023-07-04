@@ -1,92 +1,55 @@
 package ProductInfo;
 
+import Fucntion.PrintInfo;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 
-// 제품 정보 클래스
-class Product{
-    private int product_code; // 제품 코드
-    private String product_name; // 제품명
-    private int price;  // 가격
-    private int quantity;   // 재고
-    
-    // 생성자
-    Product(int product_code, String product_name, int price, int quantity){
-        this.product_code = product_code;
-        this.product_name = product_name;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-    // getter
-    public int getProduct_code() { return product_code; }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public String getProduct_name() {
-        return product_name;
-    }
-
-    // 제품 정보 전체 출력 함수
-    public void printValue(){
-        System.out.println("=======제품 정보=======");
-        System.out.print("제품 코드: ");
-        System.out.println(this.product_code);
-        System.out.print("제품명: ");
-        System.out.println(this.product_name);
-        System.out.print("제품 가격: ");
-        System.out.println(this.price);
-        System.out.print("제품 수량: ");
-        System.out.println(this.quantity);
-    }
-}
-
 // 제품관리 클래스
-public class ProductManager {
-    ArrayList<Product> p = new ArrayList<Product>(); // 제품정보를 담고 있는 리스트
-    HashMap<String, Product> productList = new HashMap<>(); // 제품정보를 담고 있는 HashMap
+public class ProductManager implements PrintInfo {
+    public ArrayList<Product> p = new ArrayList<Product>(); // 제품정보를 담고 있는 리스트
+    public HashMap<String, Product> productList = new HashMap<>(); // 제품정보를 담고 있는 HashMap
     Scanner scn = new Scanner(System.in);
     int num = 0; // 제품코드
 
+    // 관리자 로그인 코드
+    private String adminCode = "administrator";
+    // 관리자 비밀번호
+    private String password = "1234";
+
     // 생성자
     public ProductManager() throws IOException{}{
-        /* csv 파일에 저장되어 있는 데이터 가져와서 HashMap, ArrayList에 저장 */
-        String path = "product.csv"; // 엑셀 파일 명
-        File file = new File(path); // 파일 생성
-        if(file.exists()){
-            BufferedReader inFile = new BufferedReader(new FileReader(file));
-            String sLine = null;
-            while((sLine = inFile.readLine()) != null){ //한줄씩 데이터 읽어오기
-                String[] arr = sLine.split(","); // ',' 로 데이터 분리
-                try {
-                    int code = Integer.parseInt(arr[0].trim());
-                    String p_name = arr[1].trim();
-                    int price = Integer.parseInt(arr[2].trim());
-                    int quantity = Integer.parseInt(arr[3].trim());
-                    num = code+1;
-                    p.add(new Product(code, p_name, price, quantity)); // 리스트에 저장
-                    productList.put(p_name, new Product(code, p_name, price, quantity)); // hashmap에 저장
-                }catch (NumberFormatException ex){
-                    ex.printStackTrace();
-                }
-                //System.out.println("읽어 드린 문자열 출력: " + sLine);
-            }
-        }
+        readFile();
     }
 
+    // 관리자 로그인 함수
+    public void login(boolean result){
+        while(true) {
+            System.out.print("관리자 로그인 : ");
+            String id = scn.next().trim();
+            if(adminCode.equals(id)){
+                System.out.print("비밀번호 입력 : ");
+                String pwd = scn.next().trim();
+                if(password.equals(pwd)){
+                    System.out.println("관리자 로그인 성공");
+                    display(true);
+                }else {
+                    System.out.println("로그인 실패");
+                    break;
+                }
+            }else{
+                System.out.println("잘못된 ID 입력");
+                break;
+            }
+            break;
+        }
+    }
     // 제품 관리 선택 메뉴
-    public void display(boolean result) { //
+    private void display(boolean result) { //
         int p_sel = 0;
-
         while (result) {
             // -------------- 메뉴 목록 출력
             System.out.println("***** 제품 관리 메뉴 *****");
@@ -119,17 +82,13 @@ public class ProductManager {
                     for(String key : productList.keySet()){
                         productList.get(key).printValue();
                     }*/
-                     // ArrayList 사용
-                    for (Product a : p) {
-                        a.printValue(); // 제품 정보 출력
-                        System.out.println("- - - - - - - - - - - - - - -");
-                    }
+                    showInfo();
                     break;
                 case 5: // 5. 제품 검색
                     searchProduct();
                     break;
                 case 0: // 0. 돌아가기
-                    saveToFile(); // csv에 저장하기
+                    writerFile(); // csv에 저장하기
                     result = false;
                     break;
                 default: // 지정된 숫자 입력 외의 처리
@@ -149,10 +108,9 @@ public class ProductManager {
         // HashMap 사용
         String search_name = scn.next().trim(); // 검색할 제품명 입력
         for(String key: productList.keySet()){
-            if(productList.containsKey(search_name)){ // 해당 문자열이 포함되어있는지
-                productList.get(key).printValue();
-            }else {
-                System.out.println("존재하지 않는 제품입니다.");
+            if(productList.get(key).getProduct_name().equals(search_name)){ // 입력한 문자열과 제품명이 같을 떄
+                productList.get(key).printValue(); // 제품정보 출력
+                break;
             }
         }
 
@@ -191,9 +149,23 @@ public class ProductManager {
             System.out.println("제품 등록 종료");
             return false;
         }
-        else {
-            p.add(new Product(num, p_name, p_price, p_quan)); // ArrayList 추가
-            productList.put(p_name, new Product(num++, p_name, p_price, p_quan)); // HashMap 추가
+        System.out.println("제품 품목 1. 과일 2. 추가 예정");
+        int p_type = scn.nextInt(); // 제품 타입 선택
+        String typeName = null;
+        if(p_type == -1){
+            System.out.println("제품 등록 종료");
+            return false;
+        } else {
+            switch (p_type){
+                case 1:
+                    typeName = "과일";
+                    break;
+                default:
+                    System.out.println("잘못된 숫자 입력");
+                    break;
+            }
+            p.add(new Product(num, p_name, p_price, p_quan, typeName)); // ArrayList 추가
+            productList.put(p_name, new Product(num++, p_name, p_price, p_quan, typeName)); // HashMap 추가
             System.out.println("제품 등록 성공!!");
             return true;
         }
@@ -216,9 +188,12 @@ public class ProductManager {
                 int modify_price = scn.nextInt(); // 가격 수정
                 System.out.print("제품 수량: ");
                 int modify_quan = scn.nextInt();    // 수량 수정
+                // 제품 품목은 변경 x
+                String typeName = productList.get(key).getProduct_type();
+
                 productList.remove(key); // 키값인 제품명이 변경되기 때문에 삭제 후 다시 저장한다.
-                productList.put(modify_name, new Product( check.getProduct_code(), modify_name, modify_price, modify_quan)); // HashMap에 저장
-                p.set(check.getProduct_code(), new Product(check.getProduct_code(), modify_name, modify_price, modify_quan)); // ArrayList에 저장
+                productList.put(modify_name, new Product( check.getProduct_code(), modify_name, modify_price, modify_quan, typeName)); // HashMap에 저장
+                p.set(check.getProduct_code(), new Product(check.getProduct_code(), modify_name, modify_price, modify_quan, typeName)); // ArrayList에 저장
                 //productList.replace(pro_name, new Product( check.getProduct_code(), modify_name, modify_price, modify_quan));
                 break;
             }
@@ -303,8 +278,57 @@ public class ProductManager {
 
 
     }
+
+    //csv에서 파일 읽어오기
+    @Override
+    public void readFile() throws IOException {
+        /* csv 파일에 저장되어 있는 데이터 가져와서 HashMap, ArrayList에 저장 */
+        String path = "product.csv"; // 엑셀 파일 명
+        File file = new File(path); // 파일 생성
+        if(file.exists()){
+            BufferedReader inFile = new BufferedReader(new FileReader(file));
+            String sLine = null;
+            while((sLine = inFile.readLine()) != null){ //한줄씩 데이터 읽어오기
+                String[] arr = sLine.split(","); // ',' 로 데이터 분리
+                try {
+                    int code = Integer.parseInt(arr[0].trim());
+                    String p_name = arr[1].trim();
+                    int price = Integer.parseInt(arr[2].trim());
+                    int quantity = Integer.parseInt(arr[3].trim());
+                    String typeName = arr[4].trim();
+                    num = code+1;
+                    p.add(new Product(code, p_name, price, quantity, typeName)); // 리스트에 저장
+                    productList.put(p_name, new Product(code, p_name, price, quantity, typeName)); // hashmap에 저장
+                }catch (NumberFormatException ex){
+                    ex.printStackTrace();
+                }
+                //System.out.println("읽어 드린 문자열 출력: " + sLine);
+            }
+        }
+    }
+
+    @Override
+    public void showInfo() {
+        // ArrayList 사용
+        for (Product a : p) {
+            a.printValue(); // 제품 정보 출력
+            System.out.println("- - - - - - - - - - - - - - -");
+        }
+    }
+
+    // 제품 구매 시 재고에서 빼는 함수
+    public void buyProduct(int count, int pID){
+        for(Product item : p){
+            if(item.getProduct_code() == pID){
+                item.setQuantity(item.getQuantity()-count);
+            }
+        }
+        writerFile(); // 변경된 사항을 다시 csv파일에 저장한다
+    }
+
     // csv파일에 저장하기
-    private void saveToFile() {
+    @Override
+    public void writerFile() {
         String path = "product.csv";
         File file = new File(path); // 현재 파일이 저장되어 있는 위치에 파일 생성
         BufferedWriter writer = null;
@@ -321,7 +345,7 @@ public class ProductManager {
                 String str;
                 // 값을 ','를 기준으로 구별하여 저장한다.
                 str = item.getProduct_code() + "," + item.getProduct_name() + ","
-                        + item.getPrice() + "," + item.getQuantity() + "\n";
+                        + item.getPrice() + "," + item.getQuantity() + "," + item.getProduct_type() + "\n";
                 writer.append(str);
             }
             writer.close();
