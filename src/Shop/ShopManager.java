@@ -17,7 +17,7 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	HashMap<Integer, CustomerItem> hashMap = CustomerManager.hashMap; // 고객 정보가 담겨져 있는 hashMap
 	CustomerItem currentUser = new CustomerItem(); // 현재 로그인한 회원 정보를 담기 위한 객체
 	Scanner scn = new Scanner(System.in);
-	private HashMap<Integer, Basket> basketHashMap = new HashMap<>(); // 장바구니 정보가 담겨있는 HashMap
+	HashMap<Integer, Basket> basketHashMap; // 장바구니 정보가 담겨있는 HashMap
 	LocalDate now = LocalDate.now(); // 현재 날짜 가져오기
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일"); // 날짜 형식 지정
 	String formatedNow = now.format(formatter); // 날짜 포맷팅
@@ -78,9 +78,7 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	}
 
 	private void modifyBasket() {
-		Basket b;
 		int cnt = 0; // 제품의 남아있는 재고
-		boolean flag = true;
 			for (int keys : basketHashMap.keySet()) {
 				Basket bList = basketHashMap.get(keys);
 				if (currentUser.getNum() == bList.getCustomerID()) { // 현재 접속한 고객정보와 장바구니의 고객정보가 동일한 경우에만 출력
@@ -262,13 +260,13 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	// 장바구니 정보 csv파일 읽어오기
 	@Override
 	public void readFile() {
+		basketHashMap = new HashMap<>();
 		String path = "basket.csv"; // 장바구니 파일 명
 		File oderBasket = new File(path);
-		BufferedReader br = null;
 		String line = "";
 		if(oderBasket.exists()){
 			try{
-				br = new BufferedReader(new FileReader(oderBasket));
+				BufferedReader br = new BufferedReader(new FileReader(oderBasket));
 				while((line = br.readLine()) != null) { // readLine()으로 한 줄의 데이터 읽어오기
 					String[] lineArr = line.split(",");
 					int bID = Integer.parseInt(lineArr[0]); // 장바구니 코드
@@ -290,7 +288,6 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	@Override
 	public void writerFile() {
 		String path = "basket.csv"; // 장바구니 파일 명
-
 		File oderBasket = new File(path);
 		BufferedWriter bw = null; // 출력 스트림 생성
 		try{
@@ -300,9 +297,8 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 				Basket bItem = basketHashMap.get(item);
 				String data = "";
 				data = bItem.getBasketID() + "," + bItem.getCustomerID() +"," + bItem.getProductID() +"," + bItem.getDate() +","
-						+ bItem.getQuntityAll() +"," + bItem.getPrice();
+						+ bItem.getQuntityAll() +"," + bItem.getPrice() + "\n";
 				bw.write(data); // 작성한 데이터를 파일에 넣는다.
-				bw.newLine(); // 개행
 			}
 
 		}catch (FileNotFoundException e){
