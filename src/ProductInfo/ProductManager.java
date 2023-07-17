@@ -29,14 +29,14 @@ public class ProductManager implements PrintInfo {
     public void login(boolean result){
         while(true) {
             System.out.print("관리자 로그인 : ");
-            String id = scn.next().trim();
+            String id = scn.next().trim(); // 관리자 아이디 입력
             if(adminCode.equals(id)){
                 System.out.print("비밀번호 입력 : ");
-                String pwd = scn.next().trim();
-                if(password.equals(pwd)){
+                String pwd = scn.next().trim(); // 관리자 비밂번호 입력
+                if(password.equals(pwd)){ // 비밀번호가 맞을 때
                     System.out.println("관리자 로그인 성공");
                     display(true);
-                }else {
+                }else { // 로그인 실패
                     System.out.println("로그인 실패");
                     break;
                 }
@@ -291,11 +291,11 @@ public class ProductManager implements PrintInfo {
             while((sLine = inFile.readLine()) != null){ //한줄씩 데이터 읽어오기
                 String[] arr = sLine.split(","); // ',' 로 데이터 분리
                 try {
-                    int code = Integer.parseInt(arr[0].trim());
-                    String p_name = arr[1].trim();
-                    int price = Integer.parseInt(arr[2].trim());
-                    int quantity = Integer.parseInt(arr[3].trim());
-                    String typeName = arr[4].trim();
+                    int code = Integer.parseInt(arr[0].trim()); // 제품 코드
+                    String p_name = arr[1].trim(); // 제품명
+                    int price = Integer.parseInt(arr[2].trim()); //제품 가격
+                    int quantity = Integer.parseInt(arr[3].trim()); // 제품 수량
+                    String typeName = arr[4].trim(); // 제품 품목
                     num = code+1;
                     p.add(new Product(code, p_name, price, quantity, typeName)); // 리스트에 저장
                     productList.put(p_name, new Product(code, p_name, price, quantity, typeName)); // hashmap에 저장
@@ -307,12 +307,13 @@ public class ProductManager implements PrintInfo {
         }
     }
 
+    // 제품 정보 전체 출력
     @Override
     public void showInfo() {
+        System.out.println("제품코드\t\t\t| 제품명\t\t\t| 제품 가격\t\t\t| 제품 수량\t\t\t| 제품 품목");
         // ArrayList 사용
         for (Product a : p) {
             a.printValue(); // 제품 정보 출력
-            System.out.println("- - - - - - - - - - - - - - -");
         }
     }
 
@@ -335,9 +336,9 @@ public class ProductManager implements PrintInfo {
 
         try {
             if(file.createNewFile()){ // 파일이 존재하지 않으면 생성
-                System.out.println("File created: " + file.getName());
+                //System.out.println("File created: " + file.getName());
             }else { // 파일이 이미 존재하는 경우
-                System.out.println("File already exists.");
+                //System.out.println("File already exists.");
             }
 
             writer = new BufferedWriter(new FileWriter(path, false)); // append의 값이 true면 이어붙이기 false면 덮어쓰기

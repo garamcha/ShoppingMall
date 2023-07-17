@@ -26,6 +26,7 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	public ShopManager() throws IOException {
 	}
 
+
 	public ShopManager(ProductManager pManager) throws IOException {
 		super();
 		this.pm = pManager;
@@ -77,6 +78,7 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 		}
 	}
 
+	// 장바구니 수정 함수
 	private void modifyBasket() {
 		int cnt = 0; // 제품의 남아있는 재고
 			for (int keys : basketHashMap.keySet()) {
@@ -119,7 +121,6 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 			}
 		
 	}
-
 
 	// 장바구니에서 구매 함수
 	private void basketBuying(int pay, List<Integer> key) {
@@ -175,17 +176,18 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 				}
 				pay += bList.getPrice() * bList.getQuntityAll(); // 주문 수량 * 개당 가격 총 합
 														// 개당 금액 출력  	// 주문 수량		// 총 금액 출력
-				System.out.printf("%15s %15s %15s원\n",bList.getPrice(), bList.getQuntityAll(),pay);
+				System.out.printf("%15s %15s %15s원\n",bList.getPrice(), bList.getQuntityAll(), bList.getPrice() * bList.getQuntityAll());
 			}
 		}
 		
 		basketBuying(pay, key); // 장바구니 구매함수
 	}
 
-	// 제품 구매 함수
+	// 제품 담기 함수
 	private void productBuying() {
 		System.out.print("구매할 제품 이름 입력: ");
 		String pName = scn.next(); // 구매할 제품 이름입력 받기
+		System.out.println("제품코드\t\t\t| 제품명\t\t\t| 제품 가격\t\t\t| 제품 수량\t\t\t| 제품 품목");
 		Product buyItem = pm.productList.get(pName);
 		if(pm.productList.containsKey(pName)){
 			buyItem.printValue(); // 제품 정보 출력
@@ -320,6 +322,8 @@ public class ShopManager extends CustomerManager implements PrintInfo {
 	// 제품 정보 출력 함수
 	@Override
 	public void showInfo(){
+		System.out.println("제품코드\t\t\t| 제품명\t\t\t| 제품 가격\t\t\t| 제품 수량\t\t\t| 제품 품목");
+		// ArrayList 사용
 		for(Product key : pm.p){
 			key.printValue();
 		}
